@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 امتحان المراجعة الشامل - رياضيات الصف الثاني عشر العام</title>
+<meta name="description" content="امتحان مراجعة شامل يغطي جميع مواضيع رياضيات الصف الثاني عشر - 40 سؤالاً">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; }
+body.en-mode { font-family: 'Inter', sans-serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch {
+position: fixed; top: 16px; left: 16px; z-index: 100;
+background: white; padding: 6px; border-radius: 30px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px;
+border: 2px solid #7c3aed;
+}
+[dir="ltr"] .lang-switch { left: auto; right: 16px; }
+.lang-btn {
+padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold;
+transition: all 0.3s; border: none; font-size: 0.875rem;
+background: transparent; color: #6b7280;
+}
+.lang-btn.active { background: #7c3aed; color: white; box-shadow: 0 2px 6px rgba(124,58,237,0.4); }
+.lang-btn:hover:not(.active) { background: #f5f3ff; color: #7c3aed; }
+.shuffle-badge {
+display: inline-block;
+background: linear-gradient(135deg, #7c3aed, #ec4899);
+color: white;
+padding: 4px 12px;
+border-radius: 20px;
+font-size: 0.75rem;
+font-weight: bold;
+margin-right: 8px;
+animation: pulse 2s infinite;
+}
+.math-display {
+display: inline-block;
+direction: ltr;
+font-family: 'Times New Roman', 'Cambria Math', serif;
+font-size: 1.2em;
+font-style: italic;
+padding: 2px 8px;
+background: #f5f3ff;
+border-radius: 6px;
+margin: 2px;
+color: #5b21b6;
+font-weight: 600;
+letter-spacing: 0.5px;
+}
+.save-indicator {
+position: fixed; bottom: 20px; left: 20px; z-index: 200;
+background: #10b981; color: white; padding: 8px 16px;
+border-radius: 20px; font-size: 0.8rem; font-weight: bold;
+opacity: 0; transition: opacity 0.3s; pointer-events: none;
+box-shadow: 0 4px 12px rgba(16,185,129,0.4);
+}
+.save-indicator.show { opacity: 1; }
+.svg-graph {
+display: block;
+margin: 12px auto;
+background: white;
+border: 2px solid #e5e7eb;
+border-radius: 12px;
+padding: 8px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.graph-container { text-align: center; margin: 10px 0; }
+</style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-pink-50 text-gray-800 p-4 md:p-8 min-h-screen">
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+<div id="timer-container" class="max-w-4xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-md inline-block border-2 border-purple-100">
+<span class="text-gray-600 ml-2" data-ar="⏰ الوقت المتبقي:" data-en="⏰ Time Remaining:">⏰ الوقت المتبقي:</span>
+<span id="timer" class="text-2xl font-bold text-purple-600 font-mono">90:00</span>
+<span class="shuffle-badge" data-ar="🎲 أسئلة عشوائية" data-en="🎲 Random Questions">🎲 أسئلة عشوائية</span>
+</div>
+</div>
+<div class="max-w-4xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="👀 إظهار / إخفاء الإجابات" data-en="👀 Show / Hide Answers">👀 إظهار / إخفاء الإجابات</button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🖨️ طباعة" data-en="🖨️ Print">🖨️ طباعة</button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🔄 أسئلة جديدة" data-en="🔄 New Questions">🔄 أسئلة جديدة</button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🗑️ مسح التقدم" data-en="🗑️ Clear Progress">🗑️ مسح التقدم</button>
+</div>
+<header class="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-lg mb-8 border-4 border-purple-400">
+<div class="text-center">
+<h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2" data-ar="📚 امتحان المراجعة الشامل" data-en="📚 Comprehensive Review Exam">📚 امتحان المراجعة الشامل</h1>
+<h2 class="text-lg text-purple-600 font-semibold" data-ar="الصف الثاني عشر - عام (رياضيات)" data-en="Grade 12 - General (Mathematics)">الصف الثاني عشر - عام (رياضيات)</h2>
+<p class="text-sm text-gray-600 mt-2" data-ar="يشمل: الدوال التربيعية، حل المعادلات، المتباينات، التحويلات، وإكمال المربع" data-en="Covers: Quadratic Functions, Solving Equations, Inequalities, Transformations, and Completing the Square">يشمل: الدوال التربيعية، حل المعادلات، المتباينات، التحويلات، وإكمال المربع</p>
+<p class="text-xs text-green-600 mt-2 font-semibold" data-ar="💾 يتم حفظ تقدمك تلقائياً - 40 سؤالاً في 8 أقسام" data-en="💾 Your progress is saved automatically - 40 questions in 8 sections">💾 يتم حفظ تقدمك تلقائياً - 40 سؤالاً في 8 أقسام</p>
+</div>
+<div class="mt-4 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span><span data-ar="📅 التاريخ:" data-en="📅 Date:">📅 التاريخ:</span> <input type="text" id="examDate" class="border-b-2 border-purple-300 bg-transparent w-28 text-center"></span>
+<span><span data-ar="😊 الاسم:" data-en="😊 Name:">😊 الاسم:</span> <input type="text" id="studentName" class="border-b-2 border-purple-300 bg-transparent w-32 text-center" placeholder="اكتب اسمك"></span>
+<span><span data-ar="🏫 الشعبة:" data-en="🏫 Class:">🏫 الشعبة:</span> <input type="text" id="studentClass" class="border-b-2 border-purple-300 bg-transparent w-28 text-center" placeholder="الشعبة"></span>
+<span><span data-ar="⏰ المدة: 90 دقيقة" data-en="⏰ Duration: 90 min">⏰ المدة: 90 دقيقة</span></span>
+<span><span data-ar="📊 المجموع: 100 درجة" data-en="📊 Total: 100 pts">📊 المجموع: 100 درجة</span></span>
+</div>
+</header>
+<main class="max-w-4xl mx-auto space-y-8" id="exam-content"></main>
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-10 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="🎯 صحح إجاباتي!" data-en="🎯 Grade My Answers!">🎯 صحح إجاباتي!</button>
+</div>
+<div id="results-panel" class="max-w-4xl mx-auto mt-8 bg-white p-8 rounded-2xl shadow-2xl border-4 border-purple-400 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center" data-ar="🏆 نتيجتك يا بطل! 🏆" data-en="🏆 Your Results, Champion! 🏆">🏆 نتيجتك يا بطل! 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-purple-50 p-4 rounded-xl text-center"><p data-ar="😊 الاسم" data-en="😊 Name">😊 الاسم</p><p id="res-name" class="font-bold text-xl text-purple-700">-</p></div>
+<div class="bg-pink-50 p-4 rounded-xl text-center"><p data-ar="📅 التاريخ" data-en="📅 Date">📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-pink-700">-</p></div>
+<div class="bg-purple-50 p-4 rounded-xl text-center"><p data-ar="🌟 المجموع" data-en="🌟 Score">🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-purple-600">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-purple-600 mt-2">0%</p>
+<p class="text-sm text-gray-500" data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800" data-ar="📊 أدائك في كل قسم:" data-en="📊 Your Performance:">📊 أدائك في كل قسم:</h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center mb-6">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="📧 أرسل النتيجة للمعلم" data-en="📧 Send Results to Teacher">📧 أرسل النتيجة للمعلم</button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+<div class="flex gap-3 justify-center">
+<button onclick="window.print()" class="bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold" data-ar="🖨️ طباعة النتيجة" data-en="🖨️ Print Results">🖨️ طباعة النتيجة</button>
+</div>
+</div>
+<footer class="max-w-4xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© <span data-ar="امتحان المراجعة الشامل - الصف الثاني عشر" data-en="Comprehensive Review Exam - Grade 12">امتحان المراجعة الشامل - الصف الثاني عشر</span> | Mr. Mohammed Hesham 📚
+</footer>
+<script>
+// ==================== EmailJS Settings ====================
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+// ==================== 💾 نظام حفظ التقدم ====================
+const STORAGE_KEY = 'comprehensive_review_grade12_math_exam_v1';
+const TOTAL_TIME = 5400; // 90 minutes
+const TOTAL_QUESTIONS = 40;
+const TOTAL_SECTIONS = 8;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+
+function mulberry32(a) {
+return function() {
+var t = a += 0x6D2B79F5;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+}
+}
+
+let rng = null;
+
+function showSaveIndicator() {
+const indicator = document.getElementById('saveIndicator');
+indicator.classList.add('show');
+if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+try {
+const state = {
+seed: currentSeed,
+lang: currentLang,
+studentName: document.getElementById('studentName').value,
+studentClass: document.getElementById('studentClass').value,
+examDate: document.getElementById('examDate').value,
+answers: getSelectedAnswers(),
+timeRemaining: timeRemaining,
+answersVisible: answersVisible,
+savedAt: Date.now()
+};
+localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+if (showIndicator) showSaveIndicator();
+} catch (e) { console.error('خطأ في الحفظ:', e); }
+}
+
+function loadState() {
+try {
+const saved = localStorage.getItem(STORAGE_KEY);
+if (saved) return JSON.parse(saved);
+} catch (e) { console.error('خطأ في التحميل:', e); }
+return null;
+}
+
+function getSelectedAnswers() {
+const answers = {};
+for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+const selected = document.querySelector(`input[name="q${i}"]:checked`);
+if (selected) answers[i] = selected.value;
+}
+return answers;
+}
+
+function restoreAnswers(answers) {
+if (!answers) return;
+for (const [idx, val] of Object.entries(answers)) {
+const radio = document.querySelector(`input[name="q${idx}"][value="${val}"]`);
+if (radio) radio.checked = true;
+}
+}
+
+function clearProgress() {
+const confirmMsg = currentLang === 'ar'
+? '⚠️ هل أنت متأكد من مسح كل التقدم؟'
+: '⚠️ Are you sure you want to clear all progress?';
+if (confirm(confirmMsg)) {
+localStorage.removeItem(STORAGE_KEY);
+location.reload();
+}
+}
+
+function setupAnswerListeners() {
+document.getElementById('exam-content').addEventListener('change', (e) => {
+if (e.target.type === 'radio') saveState();
+});
+}
+
+function setupInputListeners() {
+['studentName', 'studentClass', 'examDate'].forEach(id => {
+const el = document.getElementById(id);
+if (el) {
+el.addEventListener('input', () => saveState(false));
+el.addEventListener('blur', () => saveState());
+}
+});
+}
+
+// ==================== رسومات SVG ====================
+const svgGraphs = {
+roots_graph: `<svg class="svg-graph" width="340" height="280" viewBox="0 0 340 280" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="330" height="270" rx="12" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+<text x="170" y="25" text-anchor="middle" font-size="14" fill="#0e7490" font-weight="bold">📈 جذور المعادلة من الرسم</text>
+<line x1="30" y1="240" x2="320" y2="240" stroke="#374151" stroke-width="2"/>
+<line x1="170" y1="30" x2="170" y2="270" stroke="#374151" stroke-width="2"/>
+<polygon points="320,240 312,236 312,244" fill="#374151"/>
+<polygon points="170,30 166,38 174,38" fill="#374151"/>
+<text x="325" y="235" font-size="12" fill="#374151">x</text>
+<text x="158" y="25" font-size="12" fill="#374151">y</text>
+<path d="M 70 100 Q 120 260 170 220 Q 220 180 270 100" fill="none" stroke="#0891b2" stroke-width="3"/>
+<circle cx="90" cy="240" r="6" fill="#dc2626"/>
+<text x="80" y="260" font-size="11" fill="#dc2626" font-weight="bold">x=1</text>
+<circle cx="250" cy="240" r="6" fill="#dc2626"/>
+<text x="240" y="260" font-size="11" fill="#dc2626" font-weight="bold">x=5</text>
+<text x="170" y="275" text-anchor="middle" font-size="11" fill="#0e7490">الجذور هي نقاط تقاطع المنحنى مع محور السينات</text>
+</svg>`,
+completing_square: `<svg class="svg-graph" width="340" height="260" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="330" height="250" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+<text x="170" y="25" text-anchor="middle" font-size="14" fill="#6d28d9" font-weight="bold">إكمال المربع</text>
+<text x="170" y="50" text-anchor="middle" font-size="12" fill="#6d28d9" font-family="'Times New Roman', serif">x² + 6x + 5 = 0</text>
+<line x1="170" y1="60" x2="170" y2="75" stroke="#7c3aed" stroke-width="2"/>
+<text x="170" y="90" text-anchor="middle" font-size="12" fill="#6d28d9" font-family="'Times New Roman', serif">(x + 3)² - 9 + 5 = 0</text>
+<line x1="170" y1="100" x2="170" y2="115" stroke="#7c3aed" stroke-width="2"/>
+<text x="170" y="130" text-anchor="middle" font-size="12" fill="#6d28d9" font-family="'Times New Roman', serif">(x + 3)² = 4</text>
+<line x1="170" y1="140" x2="170" y2="155" stroke="#7c3aed" stroke-width="2"/>
+<text x="170" y="170" text-anchor="middle" font-size="12" fill="#6d28d9" font-family="'Times New Roman', serif">x + 3 = ±2</text>
+<line x1="170" y1="180" x2="170" y2="195" stroke="#7c3aed" stroke-width="2"/>
+<text x="170" y="215" text-anchor="middle" font-size="12" fill="#dc2626" font-family="'Times New Roman', serif" font-weight="bold">x = -1 أو x = -5</text>
+<text x="170" y="240" text-anchor="middle" font-size="11" fill="#6d28d9">نضيف (b/2)² = 9 للطرفين</text>
+</svg>`,
+pool_problem: `<svg class="svg-graph" width="340" height="260" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="330" height="250" rx="12" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+<text x="170" y="25" text-anchor="middle" font-size="14" fill="#9a3412" font-weight="bold">🏊 مسألة حمام السباحة</text>
+<rect x="60" y="80" width="220" height="110" rx="4" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+<rect x="80" y="100" width="180" height="70" rx="2" fill="#60a5fa" stroke="#1e40af" stroke-width="2"/>
+<text x="170" y="140" text-anchor="middle" font-size="12" fill="white" font-weight="bold">24m × 12m</text>
+<text x="170" y="75" text-anchor="middle" font-size="11" fill="#9a3412">x (زخارف)</text>
+<text x="40" y="135" text-anchor="middle" font-size="11" fill="#9a3412">x</text>
+<text x="170" y="215" text-anchor="middle" font-size="11" fill="#9a3412">المساحة الكلية ≤ 750 m²</text>
+<text x="170" y="235" text-anchor="middle" font-size="10" fill="#9a3412">(24+x)(12+x) ≤ 750</text>
+</svg>`,
+number_line: `<svg class="svg-graph" width="340" height="120" viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="330" height="110" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+<text x="170" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">خط الأعداد</text>
+<line x1="30" y1="70" x2="310" y2="70" stroke="#374151" stroke-width="2"/>
+<circle cx="100" cy="70" r="6" fill="#2563eb"/>
+<circle cx="240" cy="70" r="6" fill="#2563eb"/>
+<text x="100" y="95" text-anchor="middle" font-size="11" fill="#1e40af">-4</text>
+<text x="240" y="95" text-anchor="middle" font-size="11" fill="#1e40af">6</text>
+<line x1="100" y1="70" x2="240" y2="70" stroke="#2563eb" stroke-width="4"/>
+<text x="170" y="50" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="bold">[-4, 6]</text>
+</svg>`
+};
+
+// ==================== بيانات الامتحان - 40 سؤالاً ====================
+const originalExamData = {
+sections: [
+// ========== القسم 1: الدوال التربيعية - الرأس ومحور التماثل (5 أسئلة) ==========
+{
+id: 'sec1',
+title: { ar: '🔹 القسم 1: الدوال التربيعية - الرأس ومحور التماثل', en: '🔹 Section 1: Quadratic Functions - Vertex & Axis' },
+questions: [
+{
+q: { ar: 'ما إحداثيات الرأس للدالة <span class="math-display">y = 2x² + 12x + 10</span>؟', en: 'What are the vertex coordinates of <span class="math-display">y = 2x² + 12x + 10</span>?' },
+options: [
+{ ar: '<span class="math-display">(-3, -8)</span>', en: '<span class="math-display">(-3, -8)</span>' },
+{ ar: '<span class="math-display">(3, -8)</span>', en: '<span class="math-display">(3, -8)</span>' },
+{ ar: '<span class="math-display">(-3, 8)</span>', en: '<span class="math-display">(-3, 8)</span>' },
+{ ar: '<span class="math-display">(3, 8)</span>', en: '<span class="math-display">(3, 8)</span>' }
+],
+correct: 0,
+answer: { ar: 'x = -b/(2a) = -12/4 = -3. نعوض: y = 2(9) + 12(-3) + 10 = 18 - 36 + 10 = -8. الرأس = (-3, -8)', en: 'x = -b/(2a) = -12/4 = -3. Substitute: y = 2(9) + 12(-3) + 10 = 18 - 36 + 10 = -8. Vertex = (-3, -8)' }
+},
+{
+q: { ar: 'ما معادلة محور التماثل للدالة <span class="math-display">y = x² + 8x + 10</span>؟', en: 'What is the axis of symmetry for <span class="math-display">y = x² + 8x + 10</span>?' },
+options: [
+{ ar: '<span class="math-display">x = -4</span>', en: '<span class="math-display">x = -4</span>' },
+{ ar: '<span class="math-display">x = 4</span>', en: '<span class="math-display">x = 4</span>' },
+{ ar: '<span class="math-display">x = -8</span>', en: '<span class="math-display">x = -8</span>' },
+{ ar: '<span class="math-display">x = 8</span>', en: '<span class="math-display">x = 8</span>' }
+],
+correct: 0,
+answer: { ar: 'محور التماثل: x = -b/(2a) = -8/2 = -4', en: 'Axis of symmetry: x = -b/(2a) = -8/2 = -4' }
+},
+{
+q: { ar: 'ما إحداثيات الرأس للدالة <span class="math-display">y = -3x² - 6x + 7</span>؟', en: 'What are the vertex coordinates of <span class="math-display">y = -3x² - 6x + 7</span>?' },
+options: [
+{ ar: '<span class="math-display">(-1, 10)</span>', en: '<span class="math-display">(-1, 10)</span>' },
+{ ar: '<span class="math-display">(1, 10)</span>', en: '<span class="math-display">(1, 10)</span>' },
+{ ar: '<span class="math-display">(-1, -10)</span>', en: '<span class="math-display">(-1, -10)</span>' },
+{ ar: '<span class="math-display">(1, -10)</span>', en: '<span class="math-display">(1, -10)</span>' }
+],
+correct: 0,
+answer: { ar: 'x = -(-6)/(2×-3) = 6/-6 = -1. y = -3(1) - 6(-1) + 7 = -3 + 6 + 7 = 10. الرأس = (-1, 10)', en: 'x = -(-6)/(2×-3) = 6/-6 = -1. y = -3(1) - 6(-1) + 7 = -3 + 6 + 7 = 10. Vertex = (-1, 10)' }
+},
+{
+q: { ar: 'ما محور التماثل للدالة <span class="math-display">y = 5(x - 4)² + 3</span>؟', en: 'What is the axis of symmetry for <span class="math-display">y = 5(x - 4)² + 3</span>?' },
+options: [
+{ ar: '<span class="math-display">x = 4</span>', en: '<span class="math-display">x = 4</span>' },
+{ ar: '<span class="math-display">x = -4</span>', en: '<span class="math-display">x = -4</span>' },
+{ ar: '<span class="math-display">x = 3</span>', en: '<span class="math-display">x = 3</span>' },
+{ ar: '<span class="math-display">x = -3</span>', en: '<span class="math-display">x = -3</span>' }
+],
+correct: 0,
+answer: { ar: 'محور التماثل هو x = h، وهنا h = 4', en: 'Axis of symmetry is x = h, here h = 4' }
+},
+{
+q: { ar: 'ما إحداثيات الرأس للدالة <span class="math-display">y = -0.5(x + 6)² - 4</span>؟', en: 'What are the vertex coordinates for <span class="math-display">y = -0.5(x + 6)² - 4</span>?' },
+options: [
+{ ar: '<span class="math-display">(-6, -4)</span>', en: '<span class="math-display">(-6, -4)</span>' },
+{ ar: '<span class="math-display">(6, -4)</span>', en: '<span class="math-display">(6, -4)</span>' },
+{ ar: '<span class="math-display">(-6, 4)</span>', en: '<span class="math-display">(-6, 4)</span>' },
+{ ar: '<span class="math-display">(6, 4)</span>', en: '<span class="math-display">(6, 4)</span>' }
+],
+correct: 0,
+answer: { ar: 'الرأس هو (h, k) حيث h = -6 و k = -4', en: 'Vertex is (h, k) where h = -6 and k = -4' }
+}
+]
+},
+// ========== القسم 2: القيمة العظمى والصغرى (5 أسئلة) ==========
+{
+id: 'sec2',
+title: { ar: '🔹 القسم 2: القيمة العظمى والصغرى', en: '🔹 Section 2: Maximum & Minimum Values' },
+questions: [
+{
+q: { ar: 'الدالة <span class="math-display">y = -2x² - 8x + 1</span> لها:', en: 'The function <span class="math-display">y = -2x² - 8x + 1</span> has:' },
+options: [
+{ ar: 'قيمة عظمى = 9', en: 'Maximum value = 9' },
+{ ar: 'قيمة صغرى = 9', en: 'Minimum value = 9' },
+{ ar: 'قيمة عظمى = 1', en: 'Maximum value = 1' },
+{ ar: 'قيمة صغرى = 1', en: 'Minimum value = 1' }
+],
+correct: 0,
+answer: { ar: 'a = -2 (سالب) → القطع مفتوح للأسفل → قيمة عظمى. الرأس عند x = -(-8)/(2×-2) = -2. y = -2(4) - 8(-2) + 1 = -8 + 16 + 1 = 9', en: 'a = -2 (negative) → opens downward → maximum. Vertex at x = -(-8)/(2×-2) = -2. y = -2(4) - 8(-2) + 1 = -8 + 16 + 1 = 9' }
+},
+{
+q: { ar: 'ما القيمة الصغرى للدالة <span class="math-display">y = x² + 4x - 5</span>؟', en: 'What is the minimum value of <span class="math-display">y = x² + 4x - 5</span>?' },
+options: [
+{ ar: '<span class="math-display">-9</span>', en: '<span class="math-display">-9</span>' },
+{ ar: '<span class="math-display">9</span>', en: '<span class="math-display">9</span>' },
+{ ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+{ ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }
+],
+correct: 0,
+answer: { ar: 'a = 1 (موجب) → قيمة صغرى. x = -4/2 = -2. y = 4 + 4(-2) - 5 = 4 - 8 - 5 = -9', en: 'a = 1 (positive) → minimum. x = -4/2 = -2. y = 4 + 4(-2) - 5 = 4 - 8 - 5 = -9' }
+},
+{
+q: { ar: 'ما القيمة العظمى للدالة <span class="math-display">y = -x² - 6x - 5</span>؟', en: 'What is the maximum value of <span class="math-display">y = -x² - 6x - 5</span>?' },
+options: [
+{ ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+{ ar: '<span class="math-display">-4</span>', en: '<span class="math-display">-4</span>' },
+{ ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+{ ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }
+],
+correct: 0,
+answer: { ar: 'a = -1 → قيمة عظمى. x = -(-6)/(2×-1) = -3. y = -9 - 6(-3) - 5 = -9 + 18 - 5 = 4', en: 'a = -1 → maximum. x = -(-6)/(2×-1) = -3. y = -9 - 6(-3) - 5 = -9 + 18 - 5 = 4' }
+},
+{
+q: { ar: 'ما هي القيمة الصغرى للدالة <span class="math-display">y = 2(x + 1)² - 7</span>؟', en: 'What is the minimum value of <span class="math-display">y = 2(x + 1)² - 7</span>?' },
+options: [
+{ ar: '<span class="math-display">-7</span>', en: '<span class="math-display">-7</span>' },
+{ ar: '<span class="math-display">7</span>', en: '<span class="math-display">7</span>' },
+{ ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+{ ar: '<span class="math-display">-1</span>', en: '<span class="math-display">-1</span>' }
+],
+correct: 0,
+answer: { ar: 'القيمة الصغرى هي قيمة k في صيغة الرأس، k = -7', en: 'The minimum value is k in vertex form, k = -7' }
+},
+{
+q: { ar: 'ما هي القيمة العظمى للدالة <span class="math-display">y = -2(x - 1)² + 5</span>؟', en: 'What is the maximum value of <span class="math-display">y = -2(x - 1)² + 5</span>?' },
+options: [
+{ ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+{ ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+{ ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+{ ar: '<span class="math-display">-1</span>', en: '<span class="math-display">-1</span>' }
+],
+correct: 0,
+answer: { ar: 'بما أن a < 0، للدالة قيمة عظمى هي k = 5', en: 'Since a < 0, the function has a maximum value k = 5' }
+}
+]
+},
+// ========== القسم 3: حل المعادلات التربيعية (5 أسئلة) ==========
+{
+id: 'sec3',
+title: { ar: '🔹 القسم 3: حل المعادلات التربيعية', en: '🔹 Section 3: Solving Quadratic Equations' },
+questions: [
+{
+q: { ar: 'حل المعادلة: <span class="math-display">x² - 7x + 12 = 0</span>', en: 'Solve: <span class="math-display">x² - 7x + 12 = 0</span>' },
+options: [
+{ ar: '<span class="math-display">x = 3 أو x = 4</span>', en: '<span class="math-display">x = 3 or x = 4</span>' },
+{ ar: '<span class="math-display">x = -3 أو x = -4</span>', en: '<span class="math-display">x = -3 or x = -4</span>' },
+{ ar: '<span class="math-display">x = 2 أو x = 6</span>', en: '<span class="math-display">x = 2 or x = 6</span>' },
+{ ar: '<span class="math-display">x = 1 أو x = 12</span>', en: '<span class="math-display">x = 1 or x = 12</span>' }
+],
+correct: 0,
+answer: { ar: '(x-3)(x-4) = 0 → x = 3 أو x = 4', en: '(x-3)(x-4) = 0 → x = 3 or x = 4' }
+},
+{
+q: { ar: 'حل المعادلة: <span class="math-display">15x² - 84x - 36 = 0</span>', en: 'Solve: <span class="math-display">15x² - 84x - 36 = 0</span>' },
+options: [
+{ ar: '<span class="math-display">x = 6, x = -2/5</span>', en: '<span class="math-display">x = 6, x = -2/5</span>' },
+{ ar: '<span class="math-display">x = -6, x = 2/5</span>', en: '<span class="math-display">x = -6, x = 2/5</span>' },
+{ ar: '<span class="math-display">x = 3, x = -4/5</span>', en: '<span class="math-display">x = 3, x = -4/5</span>' },
+{ ar: '<span class="math-display">x = 2, x = -6/5</span>', en: '<span class="math-display">x = 2, x = -6/5</span>' }
+],
+correct: 0,
+answer: { ar: 'نحلل: 3(5x + 2)(x - 6) = 0. إذن: x = -2/5 أو x = 6', en: 'Factor: 3(5x + 2)(x - 6) = 0. So: x = -2/5 or x = 6' }
+},
+{
+q: { ar: 'حل المعادلة: <span class="math-display">x² + 45x + 200 = 0</span>', en: 'Solve: <span class="math-display">x² + 45x + 200 = 0</span>' },
+options: [
+{ ar: '<span class="math-display">x = -5</span> أو <span class="math-display">x = -40</span>', en: '<span class="math-display">x = -5</span> or <span class="math-display">x = -40</span>' },
+{ ar: '<span class="math-display">x = 5</span> أو <span class="math-display">x = 40</span>', en: '<span class="math-display">x = 5</span> or <span class="math-display">x = 40</span>' },
+{ ar: '<span class="math-display">x = -5</span> أو <span class="math-display">x = 40</span>', en: '<span class="math-display">x = -5</span> or <span class="math-display">x = 40</span>' },
+{ ar: '<span class="math-display">x = 5</span> أو <span class="math-display">x = -40</span>', en: '<span class="math-display">x = 5</span> or <span class="math-display">x = -40</span>' }
+],
+correct: 0,
+answer: { ar: 'x = (-45 ± 35)/2 → x = -5 أو x = -40', en: 'x = (-45 ± 35)/2 → x = -5 or x = -40' }
+},
+{
+q: { ar: 'حل المعادلة: <span class="math-display">x² - 10x + 21 = 0</span> بالتحليل.', en: 'Solve <span class="math-display">x² - 10x + 21 = 0</span> by factoring.' },
+options: [
+{ ar: '<span class="math-display">x = 3 أو x = 7</span>', en: '<span class="math-display">x = 3 or x = 7</span>' },
+{ ar: '<span class="math-display">x = -3 أو x = -7</span>', en: '<span class="math-display">x = -3 or x = -7</span>' },
+{ ar: '<span class="math-display">x = 1 أو x = 21</span>', en: '<span class="math-display">x = 1 or x = 21</span>' },
+{ ar: '<span class="math-display">x = -1 أو x = -21</span>', en: '<span class="math-display">x = -1 or x = -21</span>' }
+],
+correct: 0,
+answer: { ar: '(x-3)(x-7) = 0 → x = 3 أو x = 7', en: '(x-3)(x-7) = 0 → x = 3 or x = 7' }
+},
+{
+q: { ar: 'حل المعادلة: <span class="math-display">6x² + 5x - 1 = 0</span>', en: 'Solve: <span class="math-display">6x² + 5x - 1 = 0</span>' },
+options: [
+{ ar: '<span class="math-display">x = 1/6</span> و <span class="math-display">x = -1</span>', en: '<span class="math-display">x = 1/6</span> and <span class="math-display">x = -1</span>' },
+{ ar: '<span class="math-display">x = -1/6</span> و <span class="math-display">x = 1</span>', en: '<span class="math-display">x = -1/6</span> and <span class="math-display">x = 1</span>' },
+{ ar: '<span class="math-display">x = 1/6</span> و <span class="math-display">x = 1</span>', en: '<span class="math-display">x = 1/6</span> and <span class="math-display">x = 1</span>' },
+{ ar: '<span class="math-display">x = -1/6</span> و <span class="math-display">x = -1</span>', en: '<span class="math-display">x = -1/6</span> and <span class="math-display">x = -1</span>' }
+],
+correct: 0,
+answer: { ar: 'Δ = 25 + 24 = 49. x = (-5 ± 7)/12 → x = 1/6 أو x = -1', en: 'Δ = 25 + 24 = 49. x = (-5 ± 7)/12 → x = 1/6 or x = -1' }
+}
+]
+},
+// ========== القسم 4: إكمال المربع (5 أسئلة) ==========
+{
+id: 'sec4',
+title: { ar: '🔹 القسم 4: إكمال المربع', en: '🔹 Section 4: Completing the Square' },
+questions: [
+{
+q: { ar: 'أعد كتابة <span class="math-display">x² - 18x + c</span> بإكمال المربع. ما قيمة c التي تجعلها مربعاً كاملاً؟', en: 'Rewrite <span class="math-display">x² - 18x + c</span> by completing the square. What value of c makes it a perfect square?' },
+svg: svgGraphs.completing_square,
+options: [
+{ ar: '<span class="math-display">c = 81</span>', en: '<span class="math-display">c = 81</span>' },
+{ ar: '<span class="math-display">c = 18</span>', en: '<span class="math-display">c = 18</span>' },
+{ ar: '<span class="math-display">c = 9</span>', en: '<span class="math-display">c = 9</span>' },
+{ ar: '<span class="math-display">c = 324</span>', en: '<span class="math-display">c = 324</span>' }
+],
+correct: 0,
+answer: { ar: 'c = (b/2)² = (-18/2)² = (-9)² = 81', en: 'c = (b/2)² = (-18/2)² = (-9)² = 81' }
+},
+{
+q: { ar: 'ما قيمة c التي تجعل <span class="math-display">x² + 12x + c</span> مربعاً كاملاً؟', en: 'What value of c makes <span class="math-display">x² + 12x + c</span> a perfect square?' },
+options: [
+{ ar: '<span class="math-display">c = 36</span>', en: '<span class="math-display">c = 36</span>' },
+{ ar: '<span class="math-display">c = 12</span>', en: '<span class="math-display">c = 12</span>' },
+{ ar: '<span class="math-display">c = 6</span>', en: '<span class="math-display">c = 6</span>' },
+{ ar: '<span class="math-display">c = 144</span>', en: '<span class="math-display">c = 144</span>' }
+],
+correct: 0,
+answer: { ar: 'c = (12/2)² = 6² = 36', en: 'c = (12/2)² = 6² = 36' }
+},
+{
+q: { ar: 'حل المعادلة <span class="math-display">x² + 4x = 6</span> بإكمال المربع. قرب إلى جزء من عشرة.', en: 'Solve <span class="math-display">x² + 4x = 6</span> by completing the square. Round to one decimal place.' },
+options: [
+{ ar: '<span class="math-display">x ≈ 1.1 أو x ≈ -5.1</span>', en: '<span class="math-display">x ≈ 1.1 or x ≈ -5.1</span>' },
+{ ar: '<span class="math-display">x ≈ 2 أو x ≈ -6</span>', en: '<span class="math-display">x ≈ 2 or x ≈ -6</span>' },
+{ ar: '<span class="math-display">x ≈ 1 أو x ≈ -5</span>', en: '<span class="math-display">x ≈ 1 or x ≈ -5</span>' },
+{ ar: '<span class="math-display">x ≈ 1.2 أو x ≈ -5.2</span>', en: '<span class="math-display">x ≈ 1.2 or x ≈ -5.2</span>' }
+],
+correct: 0,
+answer: { ar: '(x+2)² = 10 → x = -2 ± √10 ≈ -2 ± 3.16 → x ≈ 1.1 أو x ≈ -5.1', en: '(x+2)² = 10 → x = -2 ± √10 ≈ -2 ± 3.16 → x ≈ 1.1 or x ≈ -5.1' }
+},
+{
+q: { ar: 'اكتب الدالة <span class="math-display">y = x² + 8x + 15</span> بصيغة الرأس.', en: 'Write the function <span class="math-display">y = x² + 8x + 15</span> in vertex form.' },
+options: [
+{ ar: '<span class="math-display">y = (x + 4)² - 1</span>', en: '<span class="math-display">y = (x + 4)² - 1</span>' },
+{ ar: '<span class="math-display">y = (x + 4)² + 1</span>', en: '<span class="math-display">y = (x + 4)² + 1</span>' },
+{ ar: '<span class="math-display">y = (x - 4)² - 1</span>', en: '<span class="math-display">y = (x - 4)² - 1</span>' },
+{ ar: '<span class="math-display">y = (x + 8)² - 15</span>', en: '<span class="math-display">y = (x + 8)² - 15</span>' }
+],
+correct: 0,
+answer: { ar: 'بإكمال المربع: x² + 8x + 16 - 16 + 15 = (x+4)² - 1', en: 'By completing the square: x² + 8x + 16 - 16 + 15 = (x+4)² - 1' }
+},
+{
+q: { ar: 'اكتب الدالة <span class="math-display">y = 3x² + 12x + 7</span> بصيغة الرأس.', en: 'Write <span class="math-display">y = 3x² + 12x + 7</span> in vertex form.' },
+options: [
+{ ar: '<span class="math-display">y = 3(x+2)² - 5</span>', en: '<span class="math-display">y = 3(x+2)² - 5</span>' },
+{ ar: '<span class="math-display">y = 3(x+2)² + 5</span>', en: '<span class="math-display">y = 3(x+2)² + 5</span>' },
+{ ar: '<span class="math-display">y = 3(x-2)² - 5</span>', en: '<span class="math-display">y = 3(x-2)² - 5</span>' },
+{ ar: '<span class="math-display">y = 3(x+4)² - 7</span>', en: '<span class="math-display">y = 3(x+4)² - 7</span>' }
+],
+correct: 0,
+answer: { ar: 'y = 3(x² + 4x) + 7 = 3(x² + 4x + 4 - 4) + 7 = 3(x+2)² - 12 + 7 = 3(x+2)² - 5', en: 'y = 3(x² + 4x) + 7 = 3(x² + 4x + 4 - 4) + 7 = 3(x+2)² - 12 + 7 = 3(x+2)² - 5' }
+}
+]
+},
+// ========== القسم 5: المميز ونوع الجذور (5 أسئلة) ==========
+{
+id: 'sec5',
+title: { ar: '🔹 القسم 5: المميز ونوع الجذور', en: '🔹 Section 5: Discriminant & Nature of Roots' },
+questions: [
+{
+q: { ar: 'ما هو المميز للمعادلة <span class="math-display">2x² + 3x - 3 = 0</span>؟', en: 'What is the discriminant of <span class="math-display">2x² + 3x - 3 = 0</span>?' },
+options: [
+{ ar: '<span class="math-display">33</span>', en: '<span class="math-display">33</span>' },
+{ ar: '<span class="math-display">-33</span>', en: '<span class="math-display">-33</span>' },
+{ ar: '<span class="math-display">9</span>', en: '<span class="math-display">9</span>' },
+{ ar: '<span class="math-display">36</span>', en: '<span class="math-display">36</span>' }
+],
+correct: 0,
+answer: { ar: 'Δ = 3² - 4(2)(-3) = 9 + 24 = 33', en: 'Δ = 3² - 4(2)(-3) = 9 + 24 = 33' }
+},
+{
+q: { ar: 'إذا كان المميز <span class="math-display">Δ = 33</span> (موجب وليس مربعاً كاملاً)، فما نوع الجذور؟', en: 'If discriminant <span class="math-display">Δ = 33</span> (positive, not a perfect square), what is the nature of roots?' },
+options: [
+{ ar: 'جذران حقيقيان غير نسبيين (مختلفان)', en: 'Two real irrational roots (distinct)' },
+{ ar: 'جذران حقيقيان نسبيان (مختلفان)', en: 'Two real rational roots (distinct)' },
+{ ar: 'جذر حقيقي واحد مكرر', en: 'One repeated real root' },
+{ ar: 'جذران مركبان (تخيليان)', en: 'Two complex (imaginary) roots' }
+],
+correct: 0,
+answer: { ar: 'عندما يكون Δ موجباً وليس مربعاً كاملاً، الجذور حقيقية وغير نسبية', en: 'When Δ is positive but not a perfect square, roots are real and irrational' }
+},
+{
+q: { ar: 'ما نوع جذور المعادلة <span class="math-display">x² - 6x + 9 = 0</span>؟', en: 'What is the nature of roots of <span class="math-display">x² - 6x + 9 = 0</span>?' },
+options: [
+{ ar: 'جذر حقيقي واحد مكرر (Δ = 0)', en: 'One repeated real root (Δ = 0)' },
+{ ar: 'جذران حقيقيان مختلفان', en: 'Two distinct real roots' },
+{ ar: 'جذران مركبان', en: 'Two complex roots' },
+{ ar: 'لا توجد جذور', en: 'No roots' }
+],
+correct: 0,
+answer: { ar: 'Δ = (-6)² - 4(1)(9) = 36 - 36 = 0. الجذر المكرر: x = 3', en: 'Δ = (-6)² - 4(1)(9) = 36 - 36 = 0. Repeated root: x = 3' }
+},
+{
+q: { ar: 'ما نوع جذور المعادلة <span class="math-display">3x² - 3x + 8 = 0</span>؟', en: 'What is the nature of roots of <span class="math-display">3x² - 3x + 8 = 0</span>?' },
+options: [
+{ ar: 'جذران مركبان (تخيليان) لأن Δ = -87', en: 'Two complex roots because Δ = -87' },
+{ ar: 'جذران حقيقيان لأن Δ = 87', en: 'Two real roots because Δ = 87' },
+{ ar: 'جذر مكرر لأن Δ = 0', en: 'Repeated root because Δ = 0' },
+{ ar: 'جذر واحد فقط', en: 'Only one root' }
+],
+correct: 0,
+answer: { ar: 'Δ = (-3)² - 4(3)(8) = 9 - 96 = -87 (سالب) → جذران مركبان', en: 'Δ = (-3)² - 4(3)(8) = 9 - 96 = -87 (negative) → Two complex roots' }
+},
+{
+q: { ar: 'كم حل حقيقي للمعادلة <span class="math-display">x² + 4x + 8 = 0</span>؟', en: 'How many real roots does <span class="math-display">x² + 4x + 8 = 0</span> have?' },
+options: [
+{ ar: 'لا حلول حقيقية (Δ < 0)', en: 'No real roots (Δ < 0)' },
+{ ar: 'حل واحد', en: 'One root' },
+{ ar: 'حلان حقيقيان', en: 'Two real roots' },
+{ ar: 'ثلاثة حلول', en: 'Three roots' }
+],
+correct: 0,
+answer: { ar: 'Δ = 16 - 32 = -16 < 0، إذن لا حلول حقيقية', en: 'Δ = 16 - 32 = -16 < 0, so no real roots' }
+}
+]
+},
+// ========== القسم 6: الحل البياني (5 أسئلة) ==========
+{
+id: 'sec6',
+title: { ar: '🔹 القسم 6: الحل البياني للمعادلات', en: '🔹 Section 6: Graphical Solutions' },
+questions: [
+{
+q: { ar: 'من الرسم البياني للدالة <span class="math-display">y = x² - 6x + 5</span>، ما هي جذور المعادلة <span class="math-display">x² - 6x + 5 = 0</span>؟', en: 'From the graph of <span class="math-display">y = x² - 6x + 5</span>, what are the roots of <span class="math-display">x² - 6x + 5 = 0</span>?' },
+svg: svgGraphs.roots_graph,
+options: [
+{ ar: '<span class="math-display">x = 1</span> و <span class="math-display">x = 5</span>', en: '<span class="math-display">x = 1</span> and <span class="math-display">x = 5</span>' },
+{ ar: '<span class="math-display">x = -1</span> و <span class="math-display">x = -5</span>', en: '<span class="math-display">x = -1</span> and <span class="math-display">x = -5</span>' },
+{ ar: '<span class="math-display">x = 2</span> و <span class="math-display">x = 4</span>', en: '<span class="math-display">x = 2</span> and <span class="math-display">x = 4</span>' },
+{ ar: '<span class="math-display">x = 0</span> و <span class="math-display">x = 6</span>', en: '<span class="math-display">x = 0</span> and <span class="math-display">x = 6</span>' }
+],
+correct: 0,
+answer: { ar: 'الجذور هي نقاط تقاطع المنحنى مع محور السينات (y=0)، وهي x=1 و x=5', en: 'Roots are x-intercepts (y=0), which are x=1 and x=5' }
+},
+{
+q: { ar: 'إذا كان الرسم البياني لـ <span class="math-display">y = ax² + bx + c</span> يمس محور السينات في نقطة واحدة، فما عدد الحلول الحقيقية للمعادلة <span class="math-display">ax² + bx + c = 0</span>؟', en: 'If the graph of <span class="math-display">y = ax² + bx + c</span> touches the x-axis at one point, how many real solutions does <span class="math-display">ax² + bx + c = 0</span> have?' },
+options: [
+{ ar: 'حل حقيقي واحد مكرر', en: 'One repeated real solution' },
+{ ar: 'حلان حقيقيان مختلفان', en: 'Two distinct real solutions' },
+{ ar: 'لا توجد حلول حقيقية', en: 'No real solutions' },
+{ ar: 'ثلاثة حلول', en: 'Three solutions' }
+],
+correct: 0,
+answer: { ar: 'عندما يمس المنحنى محور السينات، يكون المميز = 0، وهناك جذر حقيقي مكرر', en: 'When curve touches x-axis, discriminant = 0, one repeated real root' }
+},
+{
+q: { ar: 'لحل المعادلة <span class="math-display">x² - 2x - 3 = x + 1</span> بيانياً، نرسم المنحنى <span class="math-display">y = x² - 2x - 3</span> والمستقيم:', en: 'To solve <span class="math-display">x² - 2x - 3 = x + 1</span> graphically, we graph <span class="math-display">y = x² - 2x - 3</span> and the line:' },
+options: [
+{ ar: '<span class="math-display">y = x + 1</span>', en: '<span class="math-display">y = x + 1</span>' },
+{ ar: '<span class="math-display">y = x - 1</span>', en: '<span class="math-display">y = x - 1</span>' },
+{ ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+{ ar: '<span class="math-display">y = -x - 1</span>', en: '<span class="math-display">y = -x - 1</span>' }
+],
+correct: 0,
+answer: { ar: 'نساوي الطرفين بـ y، فنرسم y = x² - 2x - 3 و y = x + 1 ونجد نقاط تقاطعهما', en: 'Set both sides to y, graph y = x² - 2x - 3 and y = x + 1, find intersections' }
+},
+{
+q: { ar: 'يُطلق صاروخ، وارتفاعه <span class="math-display">h = -5t² + 20t</span>. متى يصل الصاروخ إلى الأرض بيانياً؟', en: 'Rocket height <span class="math-display">h = -5t² + 20t</span>. When does it hit the ground graphically?' },
+options: [
+{ ar: 'عندما <span class="math-display">t = 4</span> ثوانٍ', en: 'When <span class="math-display">t = 4</span> seconds' },
+{ ar: 'عندما <span class="math-display">t = 2</span> ثوانٍ', en: 'When <span class="math-display">t = 2</span> seconds' },
+{ ar: 'عندما <span class="math-display">t = 0</span> فقط', en: 'When <span class="math-display">t = 0</span> only' },
+{ ar: 'عندما <span class="math-display">t = 5</span> ثوانٍ', en: 'When <span class="math-display">t = 5</span> seconds' }
+],
+correct: 0,
+answer: { ar: 'يصل للأرض عندما h = 0. الجذور هي t=0 و t=4. إذن يعود للأرض عند t=4', en: 'Hits ground when h = 0. Roots are t=0 and t=4. Returns at t=4' }
+},
+{
+q: { ar: 'من الرسم البياني لـ <span class="math-display">y = x² - 4x + 3</span>، ما هي قيم x التي تكون عندها <span class="math-display">y < 0</span>؟', en: 'From graph of <span class="math-display">y = x² - 4x + 3</span>, for what x values is <span class="math-display">y < 0</span>?' },
+options: [
+{ ar: '<span class="math-display">1 < x < 3</span>', en: '<span class="math-display">1 < x < 3</span>' },
+{ ar: '<span class="math-display">x < 1</span> أو <span class="math-display">x > 3</span>', en: '<span class="math-display">x < 1</span> or <span class="math-display">x > 3</span>' },
+{ ar: '<span class="math-display">x > 3</span> فقط', en: '<span class="math-display">x > 3</span> only' },
+{ ar: 'جميع قيم x', en: 'All x values' }
+],
+correct: 0,
+answer: { ar: 'y < 0 تعني الجزء من المنحنى الواقع تحت محور السينات، وهو بين الجذرين 1 و 3', en: 'y < 0 means part of curve below x-axis, which is between roots 1 and 3' }
+}
+]
+},
+// ========== القسم 7: المتباينات التربيعية (5 أسئلة) ==========
+{
+id: 'sec7',
+title: { ar: '🔹 القسم 7: المتباينات التربيعية', en: '🔹 Section 7: Quadratic Inequalities' },
+questions: [
+{
+q: { ar: 'حمام سباحة أبعاده 24m × 12m. نريد إضافة زخارف بعرض x. المساحة الكلية ≤ 750m². ما المتباينة الصحيحة؟', en: 'Pool dimensions 24m × 12m. Add decorations width x. Total area ≤ 750m². Correct inequality?' },
+svg: svgGraphs.pool_problem,
+options: [
+{ ar: '<span class="math-display">(24+x)(12+x) ≤ 750</span>', en: '<span class="math-display">(24+x)(12+x) ≤ 750</span>' },
+{ ar: '<span class="math-display">24×12 + x ≤ 750</span>', en: '<span class="math-display">24×12 + x ≤ 750</span>' },
+{ ar: '<span class="math-display">(24+x)(12+x) ≥ 750</span>', en: '<span class="math-display">(24+x)(12+x) ≥ 750</span>' },
+{ ar: '<span class="math-display">24×12×x ≤ 750</span>', en: '<span class="math-display">24×12×x ≤ 750</span>' }
+],
+correct: 0,
+answer: { ar: 'الأبعاد الجديدة: (24+x) و (12+x). المساحة = (24+x)(12+x) ≤ 750', en: 'New dimensions: (24+x) and (12+x). Area = (24+x)(12+x) ≤ 750' }
+},
+{
+q: { ar: 'حل المتباينة <span class="math-display">x² - 2x - 24 ≤ 0</span>', en: 'Solve the inequality <span class="math-display">x² - 2x - 24 ≤ 0</span>' },
+svg: svgGraphs.number_line,
+options: [
+{ ar: '<span class="math-display">[-4, 6]</span>', en: '<span class="math-display">[-4, 6]</span>' },
+{ ar: '<span class="math-display">(-∞, -4] ∪ [6, ∞)</span>', en: '<span class="math-display">(-∞, -4] ∪ [6, ∞)</span>' },
+{ ar: '<span class="math-display">(-4, 6)</span>', en: '<span class="math-display">(-4, 6)</span>' },
+{ ar: '<span class="math-display">[-6, 4]</span>', en: '<span class="math-display">[-6, 4]</span>' }
+],
+correct: 0,
+answer: { ar: '(x-6)(x+4) ≤ 0. الجذور: 6, -4. الحل بين الجذرين: [-4, 6]', en: '(x-6)(x+4) ≤ 0. Roots: 6, -4. Solution between roots: [-4, 6]' }
+},
+{
+q: { ar: 'حل المتباينة <span class="math-display">x² + 8x + 16 ≥ 0</span>', en: 'Solve the inequality <span class="math-display">x² + 8x + 16 ≥ 0</span>' },
+options: [
+{ ar: 'جميع الأعداد الحقيقية ℝ', en: 'All real numbers ℝ' },
+{ ar: '<span class="math-display">x = -4</span> فقط', en: '<span class="math-display">x = -4</span> only' },
+{ ar: '<span class="math-display">x ≥ -4</span>', en: '<span class="math-display">x ≥ -4</span>' },
+{ ar: 'لا يوجد حل', en: 'No solution' }
+],
+correct: 0,
+answer: { ar: '(x+4)² ≥ 0. المربع دائماً ≥ 0، إذن الحل جميع الأعداد الحقيقية', en: '(x+4)² ≥ 0. Square is always ≥ 0, so solution is all real numbers' }
+},
+{
+q: { ar: 'حل المتباينة <span class="math-display">x² - 5x + 6 > 0</span>', en: 'Solve the inequality <span class="math-display">x² - 5x + 6 > 0</span>' },
+options: [
+{ ar: '<span class="math-display">(-∞, 2) ∪ (3, ∞)</span>', en: '<span class="math-display">(-∞, 2) ∪ (3, ∞)</span>' },
+{ ar: '<span class="math-display">(2, 3)</span>', en: '<span class="math-display">(2, 3)</span>' },
+{ ar: '<span class="math-display">[2, 3]</span>', en: '<span class="math-display">[2, 3]</span>' },
+{ ar: '<span class="math-display">(-∞, 2] ∪ [3, ∞)</span>', en: '<span class="math-display">(-∞, 2] ∪ [3, ∞)</span>' }
+],
+correct: 0,
+answer: { ar: '(x-2)(x-3) > 0. الجذور: 2, 3. الحل خارج الجذرين (لأن > 0): (-∞, 2) ∪ (3, ∞)', en: '(x-2)(x-3) > 0. Roots: 2, 3. Solution outside roots (because > 0): (-∞, 2) ∪ (3, ∞)' }
+},
+{
+q: { ar: 'متى تكون المتباينة التربيعية <span class="math-display">ax² + bx + c > 0</span> صحيحة لجميع قيم x؟', en: 'When is the quadratic inequality <span class="math-display">ax² + bx + c > 0</span> true for all x?' },
+options: [
+{ ar: 'عندما a > 0 و Δ < 0', en: 'When a > 0 and Δ < 0' },
+{ ar: 'عندما a < 0 و Δ < 0', en: 'When a < 0 and Δ < 0' },
+{ ar: 'عندما Δ > 0', en: 'When Δ > 0' },
+{ ar: 'عندما a = 0', en: 'When a = 0' }
+],
+correct: 0,
+answer: { ar: 'إذا كان a > 0 (قطع مفتوح لأعلى) و Δ < 0 (لا جذور حقيقية)، فإن القطع بالكامل فوق المحور', en: 'If a > 0 (parabola opens up) and Δ < 0 (no real roots), parabola is entirely above axis' }
+}
+]
+},
+// ========== القسم 8: التحويلات والتطبيقات (5 أسئلة) ==========
+{
+id: 'sec8',
+title: { ar: '🔹 القسم 8: التحويلات والتطبيقات', en: '🔹 Section 8: Transformations & Applications' },
+questions: [
+{
+q: { ar: 'ما هو إزاحة الدالة <span class="math-display">y = x²</span> لتصبح <span class="math-display">y = (x + 3)² - 2</span>؟', en: 'What is the translation of <span class="math-display">y = x²</span> to become <span class="math-display">y = (x + 3)² - 2</span>?' },
+options: [
+{ ar: '3 لليسار، 2 للأسفل', en: '3 left, 2 down' },
+{ ar: '3 لليمين، 2 للأسفل', en: '3 right, 2 down' },
+{ ar: '3 لليسار، 2 للأعلى', en: '3 left, 2 up' },
+{ ar: '3 لليمين، 2 للأعلى', en: '3 right, 2 up' }
+],
+correct: 0,
+answer: { ar: 'h = -3 (إزاحة لليسار)، k = -2 (إزاحة للأسفل)', en: 'h = -3 (shift left), k = -2 (shift down)' }
+},
+{
+q: { ar: 'أي دالة تمثل توسعاً رأسياً للدالة <span class="math-display">y = x²</span>؟', en: 'Which function represents a vertical stretch of <span class="math-display">y = x²</span>?' },
+options: [
+{ ar: '<span class="math-display">y = 3x²</span>', en: '<span class="math-display">y = 3x²</span>' },
+{ ar: '<span class="math-display">y = 0.5x²</span>', en: '<span class="math-display">y = 0.5x²</span>' },
+{ ar: '<span class="math-display">y = 0.1x²</span>', en: '<span class="math-display">y = 0.1x²</span>' },
+{ ar: '<span class="math-display">y = -0.2x²</span>', en: '<span class="math-display">y = -0.2x²</span>' }
+],
+correct: 0,
+answer: { ar: 'التوسع الرأسي يحدث عندما تكون |a| > 1', en: 'Vertical stretch occurs when |a| > 1' }
+},
+{
+q: { ar: 'ما هو المقطع y للدالة <span class="math-display">y = (x - 3)² + 2</span>؟', en: 'What is the y-intercept of <span class="math-display">y = (x - 3)² + 2</span>?' },
+options: [
+{ ar: '<span class="math-display">11</span>', en: '<span class="math-display">11</span>' },
+{ ar: '<span class="math-display">9</span>', en: '<span class="math-display">9</span>' },
+{ ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+{ ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' }
+],
+correct: 0,
+answer: { ar: 'نضع x = 0: y = (0 - 3)² + 2 = 9 + 2 = 11', en: 'Set x = 0: y = (0 - 3)² + 2 = 9 + 2 = 11' }
+},
+{
+q: { ar: 'تمثل الدالة <span class="math-display">P(x) = -x² + 10x - 16</span> الربح. ما قيمة x التي تعطي أقصى ربح؟', en: 'Function <span class="math-display">P(x) = -x² + 10x - 16</span> represents profit. What x gives max profit?' },
+options: [
+{ ar: '<span class="math-display">x = 5</span>', en: '<span class="math-display">x = 5</span>' },
+{ ar: '<span class="math-display">x = 10</span>', en: '<span class="math-display">x = 10</span>' },
+{ ar: '<span class="math-display">x = 2</span>', en: '<span class="math-display">x = 2</span>' },
+{ ar: '<span class="math-display">x = 8</span>', en: '<span class="math-display">x = 8</span>' }
+],
+correct: 0,
+answer: { ar: 'أقصى ربح عند الرأس. x = -b/2a = -10/(2×-1) = 5', en: 'Max profit at vertex. x = -b/2a = -10/(2×-1) = 5' }
+},
+{
+q: { ar: 'ما مدى الدالة <span class="math-display">y = 4(x - 2)² + 1</span>؟', en: 'What is the range of <span class="math-display">y = 4(x - 2)² + 1</span>?' },
+options: [
+{ ar: '<span class="math-display">y ≥ 1</span>', en: '<span class="math-display">y ≥ 1</span>' },
+{ ar: '<span class="math-display">y ≤ 1</span>', en: '<span class="math-display">y ≤ 1</span>' },
+{ ar: '<span class="math-display">y ≥ 2</span>', en: '<span class="math-display">y ≥ 2</span>' },
+{ ar: '<span class="math-display">y ≤ 2</span>', en: '<span class="math-display">y ≤ 2</span>' }
+],
+correct: 0,
+answer: { ar: 'بما أن a > 0، فالقطع يفتح للأعلى، المدى هو y ≥ k، أي y ≥ 1', en: 'Since a > 0, parabola opens upward, range is y ≥ k, so y ≥ 1' }
+}
+]
+}
+]
+};
+
+function shuffleArray(array) {
+const arr = [...array];
+for (let i = arr.length - 1; i > 0; i--) {
+const j = Math.floor(rng() * (i + 1));
+[arr[i], arr[j]] = [arr[j], arr[i]];
+}
+return arr;
+}
+
+let examData;
+let correctAnswersMap = {};
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+
+function prepareShuffledExam() {
+rng = mulberry32(currentSeed);
+examData = JSON.parse(JSON.stringify(originalExamData));
+correctAnswersMap = {};
+let globalIdx = 0;
+examData.sections.forEach((section) => {
+section.questions = shuffleArray(section.questions);
+section.questions.forEach((q) => {
+const optionsWithCorrect = q.options.map((opt, idx) => ({
+option: opt,
+isCorrect: idx === q.correct
+}));
+const shuffledOptions = shuffleArray(optionsWithCorrect);
+q.options = shuffledOptions.map(o => o.option);
+const newCorrectIndex = shuffledOptions.findIndex(o => o.isCorrect);
+q.correct = newCorrectIndex;
+correctAnswersMap[globalIdx] = String.fromCharCode(97 + newCorrectIndex);
+globalIdx++;
+});
+});
+}
+
+function reshuffleExam() {
+const confirmMsg = currentLang === 'ar'
+? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك الحالية. هل أنت متأكد؟'
+: '🔄 New questions will be generated and your current answers will be cleared. Are you sure?';
+if (confirm(confirmMsg)) {
+currentSeed = Date.now();
+timeRemaining = TOTAL_TIME;
+answersVisible = false;
+prepareShuffledExam();
+renderExam();
+saveState();
+alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+}
+
+function setLanguage(lang) {
+currentLang = lang;
+document.documentElement.lang = lang;
+document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+document.body.classList.toggle('en-mode', lang === 'en');
+document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+el.innerHTML = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+});
+renderExam();
+saveState(false);
+}
+
+function renderExam() {
+const container = document.getElementById('exam-content');
+const labels = {
+ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' },
+en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' }
+};
+const lbl = labels[currentLang];
+const isRTL = currentLang === 'ar';
+let html = '';
+let globalIdx = 0;
+examData.sections.forEach((section) => {
+html += `<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-purple-100">
+<h2 class="text-xl font-bold mb-4 text-purple-700">${section.title[currentLang]}</h2>
+<ol class="space-y-4 text-sm">`;
+section.questions.forEach((q) => {
+const borderSide = isRTL ? 'border-r-4 pr-4' : 'border-l-4 pl-4';
+html += `<li class="${borderSide} border-purple-400 py-2" id="q-${globalIdx}">
+<strong>${globalIdx + 1}.</strong> ${q.q[currentLang]}<br>`;
+if (q.svg) html += `<div class="graph-container">${q.svg}</div>`;
+q.options.forEach((opt, oIdx) => {
+const radioSide = isRTL ? 'mr-4 ml-2' : 'ml-4 mr-2';
+html += `<label class="cursor-pointer block mt-1 ${isRTL ? 'mr-4' : 'ml-4'} hover:bg-purple-50 rounded-lg p-1 transition">
+<input type="radio" name="q${globalIdx}" value="${String.fromCharCode(97 + oIdx)}" class="${radioSide}">
+${lbl.option[oIdx]}) ${opt[currentLang]}
+</label>`;
+});
+html += `<div class="answer-box text-green-700 mt-2 font-medium ${answersVisible ? '' : 'hidden'} bg-green-50 rounded-lg p-2">
+${lbl.answer} ${lbl.option[q.correct]}) ${q.options[q.correct][currentLang]} — ${q.answer[currentLang]}
+</div></li>`;
+globalIdx++;
+});
+html += `</ol></section>`;
+});
+container.innerHTML = html;
+}
+
+function startTimer() {
+document.getElementById('timer-container').style.display = 'block';
+updateTimerDisplay();
+timerInterval = setInterval(() => {
+timeRemaining--;
+updateTimerDisplay();
+if (timeRemaining % 5 === 0) saveState(false);
+if (timeRemaining <= 300) document.getElementById('timer').classList.add('timer-warning');
+if (timeRemaining <= 0) {
+clearInterval(timerInterval);
+alert(currentLang === 'ar' ? "⏰ انتهى الوقت! سأصحح إجاباتك الآن." : "⏰ Time's up! Let me grade your answers.");
+gradeExam();
+}
+}, 1000);
+}
+
+function updateTimerDisplay() {
+const minutes = Math.floor(timeRemaining / 60);
+const seconds = timeRemaining % 60;
+document.getElementById('timer').textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+}
+
+function toggleAnswers() {
+answersVisible = !answersVisible;
+document.querySelectorAll('.answer-box').forEach(el => {
+el.classList.toggle('hidden', !answersVisible);
+});
+saveState(false);
+}
+
+function gradeExam() {
+let correctCount = 0;
+const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+const selected = document.querySelector(`input[name="q${i}"]:checked`);
+const li = document.getElementById(`q-${i}`);
+const correctAnswer = correctAnswersMap[i];
+if (li) {
+const isCorrect = selected && selected.value === correctAnswer;
+if (isCorrect) {
+correctCount++;
+li.classList.add('correct');
+li.classList.remove('incorrect');
+const sectionIndex = Math.floor(i / QUESTIONS_PER_SECTION);
+if (sectionIndex < TOTAL_SECTIONS) {
+sectionScores[sectionIndex]++;
+}
+} else {
+li.classList.add('incorrect');
+li.classList.remove('correct');
+}
+}
+}
+const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+document.getElementById('res-total').textContent = `${score} / 100`;
+document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+const performanceContainer = document.getElementById('sections-performance');
+performanceContainer.innerHTML = '';
+examData.sections.forEach((section, idx) => {
+performanceContainer.innerHTML += `
+<div class="flex justify-between items-center">
+<span class="text-gray-700">${section.title[currentLang]}</span>
+<span class="font-bold text-purple-700">${sectionScores[idx]}/${QUESTIONS_PER_SECTION}</span>
+</div>`;
+});
+const badge = document.getElementById('success-badge');
+document.getElementById('success-percent').textContent = `${score}%`;
+if (currentLang === 'ar') {
+if (score >= 90) { badge.textContent = '🌟 ممتاز جداً! 🌟'; badge.className = 'success-badge grade-excellent'; }
+else if (score >= 75) { badge.textContent = '👏 ممتاز! 👏'; badge.className = 'success-badge grade-good'; }
+else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+} else {
+if (score >= 90) { badge.textContent = '🌟 Outstanding! 🌟'; badge.className = 'success-badge grade-excellent'; }
+else if (score >= 75) { badge.textContent = '👏 Excellent! 👏'; badge.className = 'success-badge grade-good'; }
+else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+}
+document.getElementById('results-panel').classList.remove('hidden');
+document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+const btn = document.getElementById('sendEmailBtn');
+const status = document.getElementById('emailStatus');
+btn.disabled = true;
+btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+const name = document.getElementById('studentName').value || 'N/A';
+const studentClass = document.getElementById('studentClass').value || 'N/A';
+const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+const score = document.getElementById('res-total').textContent;
+const successRate = document.getElementById('success-percent').textContent;
+const badge = document.getElementById('success-badge').textContent;
+let questionsHTML = '';
+let globalIdx = 0;
+examData.sections.forEach((section, sectionIdx) => {
+questionsHTML += `<tr style="background: linear-gradient(135deg, #7c3aed, #ec4899); color: white;">
+<td colspan="5" style="padding: 12px; font-weight: bold; font-size: 14px;">
+📌 ${currentLang === 'ar' ? 'القسم' : 'Section'} ${sectionIdx + 1}: ${section.title[currentLang]}
+</td></tr>`;
+section.questions.forEach((q) => {
+const selected = document.querySelector(`input[name="q${globalIdx}"]:checked`);
+const selectedValue = selected ? selected.value : null;
+const correctValue = correctAnswersMap[globalIdx];
+const isCorrect = selectedValue === correctValue;
+let studentAnswerText = currentLang === 'ar' ? '❌ لم يجب' : '❌ No answer';
+let studentAnswerColor = '#dc2626';
+if (selectedValue) {
+const selectedIndex = selectedValue.charCodeAt(0) - 97;
+studentAnswerText = q.options[selectedIndex][currentLang];
+studentAnswerColor = isCorrect ? '#059669' : '#dc2626';
+}
+const correctAnswerText = q.options[q.correct][currentLang];
+const rowBg = isCorrect ? '#f0fdf4' : '#fef2f2';
+const borderLeft = isCorrect ? '4px solid #10b981' : '4px solid #ef4444';
+questionsHTML += `<tr style="background: ${rowBg}; border-right: ${borderLeft};">
+<td style="padding: 10px; border: 1px solid #e5e7eb; text-align: center; font-weight: bold; vertical-align: top; width: 35px;">${globalIdx + 1}</td>
+<td style="padding: 10px; border: 1px solid #e5e7eb; vertical-align: top; width: 35%;">
+<strong style="color: #5b21b6;">${currentLang === 'ar' ? '❓ السؤال:' : '❓ Question:'}</strong><br>
+<span style="color: #374151; font-size: 13px;">${q.q[currentLang]}</span>
+</td>
+<td style="padding: 10px; border: 1px solid #e5e7eb; vertical-align: top; width: 22%;">
+<strong style="color: ${studentAnswerColor};">${currentLang === 'ar' ? '✍️ إجابة الطالب:' : '✍️ Student Answer:'}</strong><br>
+<span style="color: ${studentAnswerColor}; font-size: 13px;">${studentAnswerText}</span>
+</td>
+<td style="padding: 10px; border: 1px solid #e5e7eb; vertical-align: top; width: 22%;">
+<strong style="color: #059669;">${currentLang === 'ar' ? '✅ الإجابة الصحيحة:' : '✅ Correct Answer:'}</strong><br>
+<span style="color: #059669; font-size: 13px;">${correctAnswerText}</span>
+</td>
+<td style="padding: 10px; border: 1px solid #e5e7eb; text-align: center; vertical-align: middle; width: 60px;">
+${isCorrect
+? '<span style="font-size: 24px;">✅</span><br><span style="color: #059669; font-weight: bold; font-size: 11px;">' + (currentLang === 'ar' ? 'صحيح' : 'Correct') + '</span>'
+: '<span style="font-size: 24px;">❌</span><br><span style="color: #dc2626; font-weight: bold; font-size: 11px;">' + (currentLang === 'ar' ? 'خطأ' : 'Wrong') + '</span>'}
+</td></tr>`;
+globalIdx++;
+});
+});
+const answersHTML = `
+<div style="font-family: 'Segoe UI', Tahoma, Arial, sans-serif; direction: ${currentLang === 'ar' ? 'rtl' : 'ltr'};">
+<div style="background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+<h2 style="margin: 0; font-size: 22px;">📚 ${currentLang === 'ar' ? 'نتيجة امتحان المراجعة الشامل' : 'Comprehensive Review Exam Result'}</h2>
+<p style="margin: 5px 0 0 0; opacity: 0.9;">${currentLang === 'ar' ? 'الصف الثاني عشر - عام (رياضيات)' : 'Grade 12 - General (Mathematics)'}</p>
+</div>
+<div style="background: #f5f3ff; padding: 15px; border: 1px solid #ddd6fe;">
+<table style="width: 100%; border-collapse: collapse;">
+<tr>
+<td style="padding: 8px; font-weight: bold; color: #5b21b6;">${currentLang === 'ar' ? '😊 الاسم:' : '😊 Name:'}</td>
+<td style="padding: 8px;">${name}</td>
+<td style="padding: 8px; font-weight: bold; color: #5b21b6;">${currentLang === 'ar' ? '🏫 الشعبة:' : '🏫 Class:'}</td>
+<td style="padding: 8px;">${studentClass}</td>
+</tr>
+<tr>
+<td style="padding: 8px; font-weight: bold; color: #5b21b6;">${currentLang === 'ar' ? '📅 التاريخ:' : '📅 Date:'}</td>
+<td style="padding: 8px;">${date}</td>
+<td style="padding: 8px; font-weight: bold; color: #5b21b6;">${currentLang === 'ar' ? '🏆 التقدير:' : '🏆 Grade:'}</td>
+<td style="padding: 8px;">${badge}</td>
+</tr>
+</table>
+</div>
+<div style="background: white; padding: 20px; text-align: center; border-bottom: 2px solid #e5e7eb;">
+<div style="display: inline-block; margin: 0 15px;">
+<div style="font-size: 32px; font-weight: bold; color: #7c3aed;">${score}</div>
+<div style="color: #6b7280; font-size: 13px;">${currentLang === 'ar' ? 'الدرجة الكلية' : 'Total Score'}</div>
+</div>
+<div style="display: inline-block; margin: 0 15px;">
+<div style="font-size: 32px; font-weight: bold; color: #059669;">${successRate}%</div>
+<div style="color: #6b7280; font-size: 13px;">${currentLang === 'ar' ? 'نسبة النجاح' : 'Success Rate'}</div>
+</div>
+</div>
+<h3 style="background: #f3f4f6; padding: 12px; margin: 0; color: #1f2937; border-bottom: 2px solid #d1d5db;">
+📝 ${currentLang === 'ar' ? 'تفاصيل الأسئلة والإجابات الكاملة' : 'Full Questions & Answers Details'}
+</h3>
+<table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+<thead>
+<tr style="background: #7c3aed; color: white;">
+<th style="padding: 10px; border: 1px solid #6d28d9; width: 35px;">#</th>
+<th style="padding: 10px; border: 1px solid #6d28d9; width: 35%;">${currentLang === 'ar' ? 'السؤال' : 'Question'}</th>
+<th style="padding: 10px; border: 1px solid #6d28d9; width: 22%;">${currentLang === 'ar' ? 'إجابة الطالب' : 'Student Answer'}</th>
+<th style="padding: 10px; border: 1px solid #6d28d9; width: 22%;">${currentLang === 'ar' ? 'الإجابة الصحيحة' : 'Correct Answer'}</th>
+<th style="padding: 10px; border: 1px solid #6d28d9; width: 60px;">${currentLang === 'ar' ? 'النتيجة' : 'Result'}</th>
+</tr>
+</thead>
+<tbody>${questionsHTML}</tbody>
+</table>
+<div style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); padding: 15px; border-radius: 0 0 10px 10px; border-top: 2px solid #7c3aed;">
+<p style="margin: 0; color: #5b21b6; text-align: center; font-size: 13px;">
+📚 <strong>${currentLang === 'ar' ? 'أحسنت يا بطل! استمر في المراجعة والنجاح!' : 'Great job, champion! Keep reviewing and succeeding!'}</strong> 📚
+</p>
+<p style="margin: 5px 0 0 0; color: #5b21b6; text-align: center; font-size: 12px;">
+${currentLang === 'ar' ? 'تم إرسال هذا التقرير تلقائياً | Mr. Mohammed Hesham' : 'This report was automatically sent | Mr. Mohammed Hesham'}
+</p>
+</div>
+</div>`;
+emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+to_email: TARGET_EMAIL,
+student_name: name,
+student_class: studentClass,
+exam_date: date,
+total_score: score,
+success_rate: successRate,
+grade: badge,
+answers_table: answersHTML
+}).then(() => {
+status.textContent = currentLang === 'ar' ? '✅ تم إرسال نتيجتك للمعلم!' : '✅ Your result was sent to the teacher!';
+status.style.color = '#059669';
+btn.textContent = currentLang === 'ar' ? '✓ تم الإرسال' : '✓ Sent';
+}).catch(err => {
+status.textContent = currentLang === 'ar' ? '❌ حدث خطأ، حاول مرة أخرى' : '❌ Something went wrong, try again';
+status.style.color = '#dc2626';
+btn.disabled = false;
+btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+console.error('EmailJS Error:', err);
+});
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+const savedState = loadState();
+if (savedState && savedState.seed) {
+currentSeed = savedState.seed;
+currentLang = savedState.lang || 'ar';
+timeRemaining = savedState.timeRemaining !== undefined ? savedState.timeRemaining : TOTAL_TIME;
+answersVisible = savedState.answersVisible || false;
+document.documentElement.lang = currentLang;
+document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+document.body.classList.toggle('en-mode', currentLang === 'en');
+document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+el.innerHTML = currentLang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+});
+} else {
+currentSeed = Date.now();
+}
+prepareShuffledExam();
+renderExam();
+if (savedState) {
+if (savedState.studentName) document.getElementById('studentName').value = savedState.studentName;
+if (savedState.studentClass) document.getElementById('studentClass').value = savedState.studentClass;
+if (savedState.examDate) document.getElementById('examDate').value = savedState.examDate;
+if (savedState.answers) restoreAnswers(savedState.answers);
+}
+setupAnswerListeners();
+setupInputListeners();
+startTimer();
+});
+
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
